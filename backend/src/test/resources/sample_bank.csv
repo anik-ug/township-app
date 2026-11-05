@@ -1,15 +1,14 @@
 date,amount,reference,upi_id,narration
-2026-11-01,5070.00,T01-0102-001,,maintenance T01-0102
-2026-11-01,5850.00,TXN-T02-0203,,October maintenance
-2026-11-02,6760.00,T03-0304-001,,October bill T03-0304
-2026-11-02,7540.00,TXN-T05-0702,,maintenance for T05-0702
-2026-11-02,9620.00,UPI-UNIQUE-001,rahul.b@okbank,monthly maintenance
-2026-11-03,4000.00,PART-T06-0803,,part payment T06-0803
-2026-11-03,5000.00,PART-T08-0902,,part payment T08-0902
+2026-11-01,6447.49,T12-0408-001,,September maintenance T12-0408
+2026-11-01,5096.67,T01-0102-001,,October maintenance T01-0102
+2026-11-01,5880.77,TXN-T02-0203,,October maintenance
+2026-11-02,6795.56,T03-0304-001,,October bill T03-0304
+2026-11-02,4835.30,UPI-UNIQUE-001,rahul.b@okbank,monthly maintenance
+2026-11-03,5000.00,PART-T21-1601,,part payment T21-1601
+2026-11-03,5000.00,PART-T06-0803,,part payment T06-0803
 2026-11-03,1234.00,WRONG-T09-1003,,T09-1003 adjustment
 2026-11-03,9000.00,SHARED-UPI,liftdesk@okbank,maintenance transfer
-2026-11-03,7475.00,T27-2602-001,,maintenance T27-2602
+2026-11-02,6795.56,T03-0304-001,,October bill T03-0304 duplicate
 2026-11-04,6200.00,UNKNOWN-001,,resident transfer
 2026-11-04,4500.00,UNKNOWN-002,unknown@okbank,unidentified payment
 2026-11-04,not-a-number,BAD-AMOUNT-001,,T26-2501 payment
-2026-11-04,9100.00,TXN-T26-2501,,October maintenance
