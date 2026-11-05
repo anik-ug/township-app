@@ -11,8 +11,9 @@ spring:
     enabled: true
 
 app:
-  jwt-secret: ${JWT_SECRET:local-dev-jwt-secret}
+  jwt-secret: ${JWT_SECRET:local-dev-jwt-secret-change-me-32-chars}
   demo-otp: ${DEMO_OTP:123456}
   # Fixed by default so demo numbers remain stable; override with AS_OF_DATE when needed.
   as-of-date: ${AS_OF_DATE:2026-11-05}
   classifier-api-key: ${CLASSIFIER_API_KEY:}
+  cors-origins: ${CORS_ORIGINS:http://localhost:5173}
