@@ -90,35 +90,38 @@ public class BankStatementService {
         }
         if (reference.isBlank()) error = error == null ? "Reference is required" : error + "; reference is required";
         if (error != null) {
-            saveRow(upload, date, amount, reference.isBlank() ? "LINE-" + line : reference, upi, narration,
-                    BankRowStatus.ERROR, 0, error, null, null, seen);
+            saveRow(upload, date, amount, amountText, reference.isBlank() ? "LINE-" + line : reference,
+                    upi, narration, BankRowStatus.ERROR, 0, error + " Raw amount: " + amountText,
+                    null, null, seen);
             return;
         }
         BankStatementMatcher.Row row = new BankStatementMatcher.Row(date, amount, reference, upi, narration);
         BankStatementMatcher.Result result = new BankStatementMatcher().match(row, new Lookup(seen));
         if (result.status() == BankStatementMatcher.Status.DUPLICATE) {
-            saveRow(upload, date, amount, reference, upi, narration, BankRowStatus.DUPLICATE,
+            saveRow(upload, date, amount, amountText, reference, upi, narration, BankRowStatus.DUPLICATE,
                     result.confidence(), result.explanation(), null, null, seen);
             return;
         }
-        saveRow(upload, date, amount, reference, upi, narration, BankRowStatus.valueOf(result.status().name()),
+        saveRow(upload, date, amount, amountText, reference, upi, narration, BankRowStatus.valueOf(result.status().name()),
                 result.confidence(), result.explanation(), result.flatId(), result.billId(), seen);
     }
 
-    private void saveRow(BankUpload upload, LocalDate date, long amount, String reference, String upi,
+    private void saveRow(BankUpload upload, LocalDate date, long amount, String rawAmount, String reference, String upi,
             String narration, BankRowStatus status, int confidence, String explanation, Long flatId,
             Long billId, Set<Key> seen) {
         Key key = new Key(reference, amount, date);
-        if (status == BankRowStatus.DUPLICATE || seen.contains(key)) {
+        if (status != BankRowStatus.DUPLICATE && seen.contains(key)) {
             return;
         }
-        if (rowRepository.findByReferenceAndAmountPaiseAndTxnDate(reference, amount, date).isPresent()) {
+        if (status != BankRowStatus.DUPLICATE
+                && !rowRepository.findByReferenceAndAmountPaiseAndTxnDate(reference, amount, date).isEmpty()) {
             seen.add(key);
             return;
         }
         BankRow row = new BankRow();
         row.setUpload(upload); row.setTxnDate(date); row.setAmountPaise(amount); row.setReference(reference);
-        row.setUpiId(upi); row.setNarration(narration); row.setStatus(status); row.setConfidence(confidence);
+        row.setRawAmount(rawAmount); row.setUpiId(upi); row.setNarration(narration);
+        row.setStatus(status); row.setConfidence(confidence);
         row.setExplanation(explanation); row.setMatchedFlat(flatId == null ? null : flatRepository.findById(flatId).orElse(null));
         row.setMatchedBill(billId == null ? null : billRepository.findById(billId).orElse(null));
         try {
@@ -129,8 +132,9 @@ public class BankStatementService {
                 billingService.createPayment(bill, amount, PaymentMethod.BANK_MATCH, reference, row);
             }
         } catch (DataIntegrityViolationException ex) {
-            rowRepository.findByReferenceAndAmountPaiseAndTxnDate(reference, amount, date)
-                    .ifPresent(existing -> seen.add(key));
+            if (!rowRepository.findByReferenceAndAmountPaiseAndTxnDate(reference, amount, date).isEmpty()) {
+                seen.add(key);
+            }
         }
     }
 
@@ -194,7 +198,7 @@ public class BankStatementService {
     }
 
     private RowView rowView(BankRow row) {
-        return new RowView(row.getId(), row.getTxnDate(), row.getAmountPaise(), row.getReference(),
+        return new RowView(row.getId(), row.getTxnDate(), row.getAmountPaise(), row.getRawAmount(), row.getReference(),
                 row.getStatus(), row.getConfidence(), row.getExplanation());
     }
 
@@ -227,7 +231,9 @@ public class BankStatementService {
             Key key = new Key(row.reference(), row.amountPaise(), row.date());
             if (seen.contains(key)) return Optional.of(new BankStatementMatcher.Row(row.date(), row.amountPaise(), row.reference(), row.upiId(), row.narration()));
             return rowRepository.findByReferenceAndAmountPaiseAndTxnDate(row.reference(), row.amountPaise(), row.date())
-                    .map(existing -> new BankStatementMatcher.Row(existing.getTxnDate(), existing.getAmountPaise(), existing.getReference(), existing.getUpiId(), existing.getNarration()));
+                    .stream().findFirst()
+                    .map(existing -> new BankStatementMatcher.Row(existing.getTxnDate(), existing.getAmountPaise(),
+                            existing.getReference(), existing.getUpiId(), existing.getNarration()));
         }
         public Optional<BankStatementMatcher.Flat> flatByNumber(String no) {
             return flatRepository.findByFlatNo(no).map(f -> new BankStatementMatcher.Flat(f.getId(), f.getFlatNo()));
@@ -247,7 +253,8 @@ public class BankStatementService {
                     .filter(b -> b.totalDuePaise() > 0).findFirst();
         }
     }
-    public record RowView(Long id, LocalDate date, long amountPaise, String reference, BankRowStatus status, int confidence, String explanation) {}
+    public record RowView(Long id, LocalDate date, long amountPaise, String rawAmount, String reference,
+            BankRowStatus status, int confidence, String explanation) {}
     public record UploadView(Long id, Map<String, Long> counts, List<RowView> rows) {}
     public record Candidate(Long flatId, String flatNo, long openDuePaise) {}
     public record QueueView(Long id, RowView row, List<Candidate> candidates) {}

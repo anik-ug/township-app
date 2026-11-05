@@ -53,7 +53,9 @@ class BankStatementMatcherTest {
         lookup.flat("T21-1601").upi("shared").bill(1, 1000, 0, 1000);
         assertEquals(BankStatementMatcher.Status.MATCHED, match("x", 1000, "shared", "").status());
         lookup.flat("T12-0408").upi("shared");
-        assertEquals(BankStatementMatcher.Status.QUEUED, match("x2", 1000, "shared", "").status());
+        var shared = match("x2", 1000, "shared", "");
+        assertEquals(BankStatementMatcher.Status.QUEUED, shared.status());
+        assertTrue(shared.explanation().contains("linked to multiple flats"));
     }
 
     @Test

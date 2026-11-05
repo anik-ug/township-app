@@ -8,17 +8,23 @@ import com.anik.township.billing.BillingService;
 import com.anik.township.domain.PaymentMethod;
 import com.anik.township.repository.AppUserRepository;
 import com.anik.township.repository.PaymentRepository;
+import com.anik.township.repository.BankRowRepository;
+import com.anik.township.repository.BankUploadRepository;
+import com.anik.township.repository.BankRowAuditRepository;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @SpringBootTest
@@ -29,6 +35,28 @@ class BankStatementServiceIntegrationTest {
     @Autowired AppUserRepository users;
     @Autowired PaymentRepository payments;
     @Autowired BillingService billingService;
+    @Autowired BankRowRepository bankRows;
+    @Autowired BankUploadRepository uploads;
+    @Autowired BankRowAuditRepository audits;
+    @Autowired TransactionTemplate transactionTemplate;
+
+    @BeforeEach
+    void clearImportedBankDataInsideRollback() {
+        payments.deleteBankPayments();
+        audits.deleteAllInBatch();
+        bankRows.deleteAllInBatch();
+        uploads.deleteAllInBatch();
+    }
+
+    @AfterTransaction
+    void cleanImportedBankDataAfterTest() {
+        transactionTemplate.executeWithoutResult(status -> {
+            payments.deleteBankPayments();
+            audits.deleteAllInBatch();
+            bankRows.deleteAllInBatch();
+            uploads.deleteAllInBatch();
+        });
+    }
 
     @Test
     @Transactional
@@ -38,6 +66,7 @@ class BankStatementServiceIntegrationTest {
             var file = new MockMultipartFile("file", "sample_bank.csv", "text/csv", input);
             var result = service.upload(file, new AuthUser(users.findById(43L).orElseThrow()));
             assertEquals(6L, result.counts().get("queued"));
+            assertEquals(1L, result.counts().get("duplicate"));
             assertEquals(1L, result.counts().get("error"));
         }
     }
@@ -103,6 +132,9 @@ class BankStatementServiceIntegrationTest {
                 + "2026-11-03,5000.00,PART-T21-1601,,partial");
         assertEquals(1L, result.counts().get("error"));
         assertEquals(1L, result.counts().get("queued"));
+        assertEquals("not-money", result.rows().get(0).rawAmount());
+        assertEquals(true, result.rows().get(0).explanation().contains("at most 2 decimals"));
+        assertEquals(true, result.rows().get(0).explanation().contains("Raw amount: not-money"));
     }
 
     @Test

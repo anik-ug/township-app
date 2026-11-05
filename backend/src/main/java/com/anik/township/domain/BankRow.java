@@ -37,6 +37,9 @@ public class BankRow {
     @Column(name = "amount_paise", nullable = false)
     private long amountPaise;
 
+    @Column(name = "raw_amount", length = 64)
+    private String rawAmount;
+
     @Column(nullable = false, length = 100)
     private String reference;
 

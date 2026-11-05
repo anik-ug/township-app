@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BankRowRepository extends JpaRepository<BankRow, Long> {
-    Optional<BankRow> findByReferenceAndAmountPaiseAndTxnDate(String reference, long amountPaise, LocalDate txnDate);
+    List<BankRow> findByReferenceAndAmountPaiseAndTxnDate(String reference, long amountPaise, LocalDate txnDate);
     List<BankRow> findByUploadIdOrderByIdAsc(Long uploadId);
     List<BankRow> findByStatusOrderByTxnDateAscIdAsc(BankRowStatus status);
 }
