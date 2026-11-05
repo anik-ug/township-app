@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/township}
+    username: ${DB_USER:township}
+    password: ${DB_PASSWORD:township_dev}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+app:
+  jwt-secret: ${JWT_SECRET:local-dev-jwt-secret}
+  demo-otp: ${DEMO_OTP:123456}
+  as-of-date: ${AS_OF_DATE:}
+  classifier-api-key: ${CLASSIFIER_API_KEY:}
