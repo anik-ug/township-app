@@ -1,0 +1,2 @@
+ALTER TABLE payment
+    ADD COLUMN late_fee_paise BIGINT NOT NULL DEFAULT 0;

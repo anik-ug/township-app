@@ -34,6 +34,9 @@ public class Payment {
     @Column(name = "amount_paise", nullable = false)
     private long amountPaise;
 
+    @Column(name = "late_fee_paise", nullable = false)
+    private long lateFeePaise;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
     private PaymentMethod method;

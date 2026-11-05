@@ -82,8 +82,9 @@ class SecurityMockMvcTest {
         AppUser user = testUser(1L, Role.RESIDENT, 1L);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         String valid = jwtService.issueToken(user);
-        String tampered = valid.substring(0, valid.length() - 1)
-                + (valid.endsWith("a") ? "b" : "a");
+        int pos = valid.lastIndexOf('.') + 11;   // 11th character of the signature: all 6 bits count
+        char c = valid.charAt(pos);
+        String tampered = valid.substring(0, pos) + (c == 'A' ? 'B' : 'A') + valid.substring(pos + 1);
         mockMvc.perform(get("/api/resident/ping").header("Authorization", "Bearer " + tampered))
                 .andExpect(status().isUnauthorized());
 
