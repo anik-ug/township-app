@@ -4,5 +4,7 @@ public enum BankRowStatus {
     MATCHED,
     QUEUED,
     DUPLICATE,
-    RESOLVED
+    RESOLVED,
+    REJECTED,
+    ERROR
 }

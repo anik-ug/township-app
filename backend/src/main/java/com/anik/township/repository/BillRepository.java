@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findByFlatIdOrderByBillMonthDesc(Long flatId);
+    List<Bill> findByFlatIdOrderByBillMonthAsc(Long flatId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select b from Bill b join fetch b.flat where b.id = :id")

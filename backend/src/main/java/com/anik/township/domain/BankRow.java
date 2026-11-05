@@ -61,6 +61,10 @@ public class BankRow {
     private Flat matchedFlat;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "matched_bill_id")
+    private Bill matchedBill;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resolved_by")
     private AppUser resolvedBy;
 }

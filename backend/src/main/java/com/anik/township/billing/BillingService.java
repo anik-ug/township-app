@@ -2,6 +2,7 @@ package com.anik.township.billing;
 
 import com.anik.township.config.DateProvider;
 import com.anik.township.domain.Bill;
+import com.anik.township.domain.BankRow;
 import com.anik.township.domain.BillStatus;
 import com.anik.township.domain.ComplaintStatus;
 import com.anik.township.domain.LateFeeRule;
@@ -109,22 +110,33 @@ public class BillingService {
         if (!bill.getFlat().getId().equals(flatId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Bill not found");
         }
+        BillAmounts beforePayment = amounts(bill);
+        Payment saved = createPayment(bill, amountPaise, PaymentMethod.TEST_ONLINE,
+                "TEST-" + UUID.randomUUID(), null);
+        return receipt(saved, beforePayment.totalDuePaise() - amountPaise);
+    }
+
+    @Transactional
+    public Payment createPayment(Bill bill, long amountPaise, PaymentMethod method,
+            String reference, BankRow bankRow) {
         BillAmounts amounts = amounts(bill);
-        if (amountPaise > amounts.totalDuePaise()) {
+        if (amountPaise <= 0 || amountPaise > amounts.totalDuePaise()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment exceeds total due");
         }
-        // Allocate every payment to the computed late fee first, then to principal.
-        long lateFeePaise = Math.min(amountPaise, amounts.lateFeeDuePaise());
-        long principalPaise = amountPaise - lateFeePaise;
         Payment payment = new Payment();
         payment.setBill(bill);
         payment.setAmountPaise(amountPaise);
-        payment.setLateFeePaise(lateFeePaise);
-        payment.setMethod(PaymentMethod.TEST_ONLINE);
-        payment.setReference("TEST-" + UUID.randomUUID());
+        payment.setLateFeePaise(Math.min(amountPaise, amounts.lateFeeDuePaise()));
+        payment.setMethod(method);
+        payment.setReference(reference);
+        payment.setBankRow(bankRow);
         payment.setPaidAt(dateProvider.now());
-        Payment saved = paymentRepository.save(payment);
-        return receipt(saved, amounts.totalDuePaise() - amountPaise);
+        return paymentRepository.save(payment);
+    }
+
+    @Transactional(readOnly = true)
+    public long totalDuePaise(Bill bill) {
+        return amounts(bill).totalDuePaise();
     }
 
     @Transactional(readOnly = true)
