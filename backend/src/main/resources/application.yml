@@ -13,5 +13,6 @@ spring:
 app:
   jwt-secret: ${JWT_SECRET:local-dev-jwt-secret}
   demo-otp: ${DEMO_OTP:123456}
-  as-of-date: ${AS_OF_DATE:}
+  # Fixed by default so demo numbers remain stable; override with AS_OF_DATE when needed.
+  as-of-date: ${AS_OF_DATE:2026-11-05}
   classifier-api-key: ${CLASSIFIER_API_KEY:}
