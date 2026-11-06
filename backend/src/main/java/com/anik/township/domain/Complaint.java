@@ -72,4 +72,13 @@ public class Complaint {
 
     @Column(name = "closed_at")
     private OffsetDateTime closedAt;
+
+    @Column(name = "reopen_count", nullable = false)
+    private int reopenCount;
+
+    @Column
+    private Short rating;
+
+    @Column(name = "first_response_at")
+    private OffsetDateTime firstResponseAt;
 }

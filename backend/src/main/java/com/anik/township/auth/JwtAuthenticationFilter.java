@@ -35,7 +35,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = jwtService.parse(header.substring(7));
                 Long userId = claims.get("userId", Long.class);
                 Long flatId = claims.get("flatId", Long.class);
-                AppUser user = userRepository.findById(userId).orElse(null);
+                AppUser user = userRepository.findByPhone(claims.getSubject())
+                        .orElseGet(() -> userRepository.findById(userId).orElse(null));
+                if (user != null && !user.getId().equals(userId)) {
+                    user = null;
+                }
                 if (user != null && (flatId == null || flatId == 0L
                         || (user.getFlat() != null && user.getFlat().getId().equals(flatId)))) {
                     UsernamePasswordAuthenticationToken authentication =

@@ -16,4 +16,16 @@ app:
   # Fixed by default so demo numbers remain stable; override with AS_OF_DATE when needed.
   as-of-date: ${AS_OF_DATE:2026-11-05}
   classifier-api-key: ${CLASSIFIER_API_KEY:}
+  duty-manager-phone: ${DUTY_MANAGER_PHONE:9100000001}
+  safety-terms: fire,smoke,gas leak,gas smell,smell of gas,lift stuck,stuck in lift,stuck in the lift,shock,electric shock,short circuit,sparking,aag,dhuan,gas leakage,current laga,lift mein fas
+  classifier:
+    base-url: ${CLASSIFIER_BASE_URL:https://api.openai.com/v1/chat/completions}
+    model: ${CLASSIFIER_MODEL:gpt-4o-mini}
+    keywords:
+      plumbing: water,leak,pipe,tap,drainage,toilet
+      electrical: power,electric,electricity,wiring,light,switch,current
+      lift: lift,elevator
+      security: security,guard,theft,visitor,stranger
+      housekeeping: clean,garbage,dirty,housekeeping
+      parking: parking,vehicle,car,bike
   cors-origins: ${CORS_ORIGINS:http://localhost:5173}
