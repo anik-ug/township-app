@@ -5,7 +5,8 @@ import { MemoryRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StaffLayout } from './StaffLayout';
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT =
+  true;
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 vi.mock('../components/LanguageSwitcher', () => ({ LanguageSwitcher: () => <div /> }));
 vi.mock('../lib/session', () => ({
@@ -26,7 +27,14 @@ function renderLayout() {
     root.render(
       <MemoryRouter initialEntries={['/helpdesk']}>
         <Routes>
-          <Route path="*" element={<StaffLayout><NavigationButton /></StaffLayout>} />
+          <Route
+            path="*"
+            element={
+              <StaffLayout>
+                <NavigationButton />
+              </StaffLayout>
+            }
+          />
         </Routes>
       </MemoryRouter>,
     );
@@ -49,7 +57,9 @@ describe('StaffLayout mobile menu', () => {
 
   it('opens and closes from the button, close button, backdrop, Escape, and navigation', () => {
     rendered = renderLayout();
-    const menuButton = rendered.container.querySelector('[aria-controls="staff-menu"]') as HTMLButtonElement;
+    const menuButton = rendered.container.querySelector(
+      '[aria-controls="staff-menu"]',
+    ) as HTMLButtonElement;
     const menu = rendered.container.querySelector('[role="dialog"]') as HTMLElement;
     expect(menu.classList.contains('hidden')).toBe(true);
 
@@ -57,7 +67,9 @@ describe('StaffLayout mobile menu', () => {
     expect(menu.classList.contains('hidden')).toBe(false);
     expect(menuButton.getAttribute('aria-expanded')).toBe('true');
 
-    const closeButton = rendered.container.querySelector('[aria-label="closeMenu"]') as HTMLButtonElement;
+    const closeButton = rendered.container.querySelector(
+      '[aria-label="closeMenu"]',
+    ) as HTMLButtonElement;
     act(() => closeButton.click());
     expect(menu.classList.contains('hidden')).toBe(true);
 
@@ -71,7 +83,9 @@ describe('StaffLayout mobile menu', () => {
     expect(menu.classList.contains('hidden')).toBe(true);
 
     act(() => menuButton.click());
-    const navigateButton = rendered.container.querySelector('button:not([aria-controls]):not([aria-label])') as HTMLButtonElement;
+    const navigateButton = rendered.container.querySelector(
+      'button:not([aria-controls]):not([aria-label])',
+    ) as HTMLButtonElement;
     act(() => navigateButton.click());
     expect(menu.classList.contains('hidden')).toBe(true);
   });

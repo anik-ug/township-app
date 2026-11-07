@@ -13,6 +13,25 @@ export function parseAmountPaise(value: string): number | null {
   const roundedCents = Number(fraction.slice(0, 2)) + (Number(fraction[2]) >= 5 ? 1 : 0);
   return Number(whole) * 100 + roundedCents;
 }
+export function sanitizeRupeeInput(value: string): string {
+  const cleaned = value.replace(/[^0-9.]/g, '');
+  const dot = cleaned.indexOf('.');
+  const whole = (dot < 0 ? cleaned : cleaned.slice(0, dot)).slice(0, 9);
+  if (dot < 0) return whole;
+  const decimals = cleaned
+    .slice(dot + 1)
+    .replace(/\./g, '')
+    .slice(0, 2);
+  return `${whole}.${decimals}`;
+}
+export function parseRupeesToPaise(value: string): number | null {
+  const sanitized = sanitizeRupeeInput(value);
+  if (!sanitized || sanitized === '.' || !/^\d+(?:\.\d{0,2})?$/.test(sanitized)) return null;
+  const [whole, fraction = ''] = sanitized.split('.');
+  const paise = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0') || '0');
+  if (paise === 0n || paise > BigInt(Number.MAX_SAFE_INTEGER)) return null;
+  return Number(paise);
+}
 export const formatDate = (value: string | null, locale = 'en') =>
   value
     ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'Asia/Kolkata' }).format(

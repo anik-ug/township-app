@@ -30,9 +30,11 @@ export function Home() {
           {t('welcome')}, {user.name}
         </h1>
       </div>
-      <Card className="mb-4">
+      <Card className="mb-4 border-accent/20">
         <p className="mb-2 text-muted">{t('totalDue')}</p>
-        <MoneyText paise={data.totalDuePaise} large />
+        <div className="text-3xl font-bold">
+          <MoneyText paise={data.totalDuePaise} large />
+        </div>
         {data.totalDuePaise > 0 ? (
           <>
             <p className="mt-3 text-sm text-muted">
@@ -42,7 +44,7 @@ export function Home() {
             </p>
             {next && (
               <Link className="mt-5 block" to={`/bills/${next.id}/pay`}>
-                <Button>{t('payNow')}</Button>
+                <Button className="w-full">{t('payNow')}</Button>
               </Link>
             )}
           </>
@@ -50,7 +52,7 @@ export function Home() {
           <p className="mt-3 font-semibold text-accent">{t('allPaid')}</p>
         )}
       </Card>
-      <Link to="/complaints">
+      <Link className="block" to="/complaints">
         <Card>
           <p className="text-muted">{t('openComplaints')}</p>
           <p className="mt-2 text-3xl font-bold nums">{data.openComplaintCount}</p>

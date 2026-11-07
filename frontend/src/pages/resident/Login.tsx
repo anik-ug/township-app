@@ -37,57 +37,61 @@ export function Login() {
   };
 
   return (
-    <div className="mx-auto max-w-md px-4 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md items-center px-4 py-10">
       <div className="mb-10 flex justify-end">
         <LanguageSwitcher />
       </div>
-      <div className="mb-10">
-        <p className="mb-2 font-semibold text-accent">{t('appName')}</p>
-        <h1 className="text-3xl font-bold">{t('loginTitle')}</h1>
+      <div className="w-full rounded-lg border border-slate-200 bg-white p-6">
+        <div className="mb-10">
+          <p className="mb-2 font-semibold text-accent">{t('appName')}</p>
+          <h1 className="text-3xl font-bold">{t('loginTitle')}</h1>
+        </div>
+        <form className="space-y-6" onSubmit={submit}>
+          {step === 1 ? (
+            <FormField label={t('phone')}>
+              <input
+                autoFocus
+                inputMode="numeric"
+                maxLength={10}
+                autoComplete="tel"
+                className="focus-ring w-full rounded-lg border border-slate-300 px-4 py-3"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value.replace(/\D/g, ''))}
+              />
+            </FormField>
+          ) : (
+            <FormField label={t('otp')}>
+              <input
+                autoFocus
+                inputMode="numeric"
+                maxLength={6}
+                autoComplete="one-time-code"
+                className="focus-ring w-full rounded-lg border border-slate-300 px-4 py-3 tracking-[.4em]"
+                value={otp}
+                onChange={(event) => setOtp(event.target.value.replace(/\D/g, ''))}
+              />
+            </FormField>
+          )}
+          {error && (
+            <p aria-live="polite" className="text-danger">
+              {error}
+            </p>
+          )}
+          {step === 2 && (
+            <button
+              type="button"
+              className="focus-ring text-sm text-accent"
+              onClick={() => setStep(1)}
+            >
+              {t('back')}
+            </button>
+          )}
+          <Button type="submit">{step === 1 ? t('sendOtp') : t('verify')}</Button>
+          {step === 2 && import.meta.env.VITE_SHOW_DEMO_HINT === 'true' && (
+            <p className="text-sm text-muted">{t('demoOtp')}</p>
+          )}
+        </form>
       </div>
-      <form className="space-y-6" onSubmit={submit}>
-        {step === 1 ? (
-          <FormField label={t('phone')}>
-            <input
-              autoFocus
-              inputMode="numeric"
-              maxLength={10}
-              className="focus-ring w-full rounded-lg border border-slate-300 px-4 py-3"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value.replace(/\D/g, ''))}
-            />
-          </FormField>
-        ) : (
-          <FormField label={t('otp')}>
-            <input
-              autoFocus
-              inputMode="numeric"
-              maxLength={6}
-              className="focus-ring w-full rounded-lg border border-slate-300 px-4 py-3 tracking-[.4em]"
-              value={otp}
-              onChange={(event) => setOtp(event.target.value.replace(/\D/g, ''))}
-            />
-          </FormField>
-        )}
-        {error && (
-          <p aria-live="polite" className="text-danger">
-            {error}
-          </p>
-        )}
-        {step === 2 && (
-          <button
-            type="button"
-            className="focus-ring text-sm text-accent"
-            onClick={() => setStep(1)}
-          >
-            {t('back')}
-          </button>
-        )}
-        <Button type="submit">{step === 1 ? t('sendOtp') : t('verify')}</Button>
-        {step === 2 && import.meta.env.VITE_SHOW_DEMO_HINT === 'true' && (
-          <p className="text-sm text-muted">{t('demoOtp')}</p>
-        )}
-      </form>
     </div>
   );
 }

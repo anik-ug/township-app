@@ -11,7 +11,8 @@ vi.mock('react-i18next', async (importOriginal) => ({
 import i18n from '../i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT =
+  true;
 
 describe('LanguageSwitcher', () => {
   afterEach(() => {

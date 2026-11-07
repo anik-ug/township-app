@@ -28,7 +28,11 @@ function Protected() {
 }
 function StaffProtected({ role }: { role: string }) {
   const token = getToken();
-  return hasRoleAccess(token, getUser(), role) ? <Outlet /> : <Navigate to={token ? '/wrong-role' : '/login'} replace />;
+  return hasRoleAccess(token, getUser(), role) ? (
+    <Outlet />
+  ) : (
+    <Navigate to={token ? '/wrong-role' : '/login'} replace />
+  );
 }
 
 export function App() {
@@ -50,9 +54,15 @@ export function App() {
             <Route path="/account" element={<Account />} />
           </Route>
         </Route>
-        <Route element={<StaffProtected role="HELPDESK" />}><Route path="/helpdesk" element={<Helpdesk />} /></Route>
-        <Route element={<StaffProtected role="ACCOUNTS" />}><Route path="/accounts" element={<Accounts />} /></Route>
-        <Route element={<StaffProtected role="COMMITTEE" />}><Route path="/committee" element={<Committee />} /></Route>
+        <Route element={<StaffProtected role="HELPDESK" />}>
+          <Route path="/helpdesk" element={<Helpdesk />} />
+        </Route>
+        <Route element={<StaffProtected role="ACCOUNTS" />}>
+          <Route path="/accounts" element={<Accounts />} />
+        </Route>
+        <Route element={<StaffProtected role="COMMITTEE" />}>
+          <Route path="/committee" element={<Committee />} />
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

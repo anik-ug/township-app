@@ -47,6 +47,7 @@ export function ComplaintDetail() {
             <p className="mb-2 font-medium">{t('rate')}</p>
             {[1, 2, 3, 4, 5].map((number) => (
               <button
+                type="button"
                 className="tap focus-ring text-2xl text-warning"
                 key={number}
                 aria-label={`${number} ${t('rate')}`}
@@ -63,7 +64,10 @@ export function ComplaintDetail() {
         <h3 className="mt-8 border-t pt-5 font-semibold">{t('timeline')}</h3>
         <ol className="mt-4 space-y-5 border-l border-slate-200 pl-5">
           {data.timeline.map((event, index) => (
-            <li key={`${event.at}-${index}`}>
+            <li
+              className="relative before:absolute before:-left-[25px] before:top-1 before:h-2 before:w-2 before:rounded-full before:bg-accent"
+              key={`${event.at}-${index}`}
+            >
               <p className="font-medium">{event.note}</p>
               <p className="mt-1 text-sm text-muted">{formatDateTime(event.at, i18n.language)}</p>
             </li>

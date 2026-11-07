@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { formatMoney, isOtp, isPhone, parseAmountPaise, validPayAmount } from './format';
+import {
+  formatMoney,
+  isOtp,
+  isPhone,
+  parseAmountPaise,
+  parseRupeesToPaise,
+  sanitizeRupeeInput,
+  validPayAmount,
+} from './format';
 import { isResidentAccess } from './guard';
 import en from '../locales/en.json';
 import hi from '../locales/hi.json';
@@ -28,6 +36,17 @@ it('parses decimal rupees using half-up cents without float arithmetic', () => {
   expect(parseAmountPaise('6447.49')).toBe(644749);
   expect(parseAmountPaise('1.235')).toBe(124);
   expect(parseAmountPaise('nope')).toBeNull();
+});
+it('parses rupees safely from strings', () => {
+  expect(parseRupeesToPaise('1000')).toBe(100000);
+  expect(parseRupeesToPaise('1000.5')).toBe(100050);
+  expect(parseRupeesToPaise('10.555')).toBe(1055);
+  expect(parseRupeesToPaise('')).toBeNull();
+  expect(parseRupeesToPaise('.')).toBeNull();
+  expect(parseRupeesToPaise('0')).toBeNull();
+  expect(parseRupeesToPaise('0.00')).toBeNull();
+  expect(sanitizeRupeeInput('abc')).toBe('');
+  expect(sanitizeRupeeInput('1e3')).toBe('13');
 });
 it('allows only resident sessions through the route guard', () => {
   expect(isResidentAccess('token', { name: 'Demo', role: 'RESIDENT', flatNo: 'A-101' })).toBe(true);

@@ -28,10 +28,10 @@ export function NewComplaint() {
   const [error, setError] = useState('');
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (description.length < 10 || description.length > 1000)
-      return setError(t('descriptionLength'));
+    const trimmed = description.trim();
+    if (trimmed.length < 10 || trimmed.length > 1000) return setError(t('descriptionLength'));
     try {
-      setResult(await api.createComplaint(description, category));
+      setResult(await api.createComplaint(trimmed, category));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : t('requestFailed'));
     }
@@ -43,7 +43,7 @@ export function NewComplaint() {
         <Card>
           <p className="font-semibold">
             {t(`categories.${result.category}`, { defaultValue: result.category })} ·{' '}
-            {t(`statusLabels.${result.urgency}`, { defaultValue: result.urgency })}
+            {t(`urgencyLabels.${result.urgency}`, { defaultValue: t('unknownStatus') })}
           </p>
           <p className="mt-3">{t('assigned')}</p>
           {result.escalated && (
@@ -68,7 +68,7 @@ export function NewComplaint() {
             maxLength={1000}
           />
           <span className="block text-right text-sm text-muted">
-            {description.length}/1000 {t('characters')}
+            {description.trim().length}/1000 {t('characters')}
           </span>
         </FormField>
         <FormField label={`${t('category')} (${t('optional')})`}>
@@ -91,7 +91,9 @@ export function NewComplaint() {
             {error}
           </p>
         )}
-        <Button type="submit">{t('submit')}</Button>
+        <Button type="submit" disabled={description.trim().length < 10}>
+          {t('submit')}
+        </Button>
       </form>
     </>
   );
