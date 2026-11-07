@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { isResidentAccess } from './lib/guard';
+import { hasRoleAccess, isResidentAccess } from './lib/guard';
 import { getToken } from './lib/session';
 import { getUser } from './lib/session';
 import { ResidentLayout } from './layouts/ResidentLayout';
@@ -14,6 +14,9 @@ import { NewComplaint } from './pages/resident/NewComplaint';
 import { Pay } from './pages/resident/Pay';
 import { Receipt } from './pages/resident/Receipt';
 import { WrongRole } from './pages/resident/WrongRole';
+import { Helpdesk } from './pages/staff/Helpdesk';
+import { Accounts } from './pages/staff/Accounts';
+import { Committee } from './pages/staff/Committee';
 
 function Protected() {
   const token = getToken();
@@ -22,6 +25,10 @@ function Protected() {
   ) : (
     <Navigate to={token ? '/wrong-role' : '/login'} replace />
   );
+}
+function StaffProtected({ role }: { role: string }) {
+  const token = getToken();
+  return hasRoleAccess(token, getUser(), role) ? <Outlet /> : <Navigate to={token ? '/wrong-role' : '/login'} replace />;
 }
 
 export function App() {
@@ -43,6 +50,9 @@ export function App() {
             <Route path="/account" element={<Account />} />
           </Route>
         </Route>
+        <Route element={<StaffProtected role="HELPDESK" />}><Route path="/helpdesk" element={<Helpdesk />} /></Route>
+        <Route element={<StaffProtected role="ACCOUNTS" />}><Route path="/accounts" element={<Accounts />} /></Route>
+        <Route element={<StaffProtected role="COMMITTEE" />}><Route path="/committee" element={<Committee />} /></Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

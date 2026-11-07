@@ -108,5 +108,7 @@
     "BILL": "Bill",
     "PAYMENT": "Payment",
     "LATE_FEE": "Late fee"
-  }
+  },
+  "menu": "Menu", "dashboard": "Dashboard", "role": {"HELPDESK": "Helpdesk", "ACCOUNTS": "Accounts", "COMMITTEE": "Committee"}, "bill": "Bill", "billTotalValidation": "The server validates the selected bill's total due.",
+  "helpdeskTitle": "Helpdesk", "complaintQueue": "Complaint queue", "allStatus": "All statuses", "allCategory": "All categories", "allUrgency": "All urgencies", "allTower": "All towers", "escalatedOnly": "Escalated only", "id": "ID", "age": "Age", "assignee": "Assignee", "linkedTo": "Linked to #{{id}}", "escalatedReason": "Escalated: {{reason}}", "saved": "Saved", "accountsTitle": "Accounts", "unclearPayments": "Unclear payments are never posted automatically.", "uploadCsv": "Upload CSV", "matched": "Matched", "queued": "Queued", "duplicate": "Duplicate", "error": "Error", "confidence": "Confidence", "reference": "Reference", "why": "Why", "accountsQueue": "Accounts queue", "resolve": "Resolve", "reject": "Reject", "openDue": "open due", "noCandidates": "No candidate flats found", "billIdPrompt": "Enter the bill ID to resolve", "rejectReason": "Enter a reason for rejecting this payment", "committeeTitle": "Committee dashboard", "dataAsOf": "Data as of {{date}}", "collectionRate": "Collection rate", "outstandingDues": "Outstanding dues", "slaBreaches": "SLA breaches", "duesAgeing": "Dues ageing", "collections": "Collections", "billed": "Billed", "collected": "Collected", "onTimeRate": "On-time rate", "paidByDay10": "Paid by day 10", "avgFirstResponse": "Average first response", "avgResolution": "Average resolution", "reopened": "Reopened", "topFlats": "Top flats by dues"
 }

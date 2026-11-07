@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
 import { isOtp, isPhone } from '../../lib/format';
 import { saveSession } from '../../lib/session';
+import { rolePath } from '../../lib/guard';
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
 import { LanguageSwitcher } from '../../components/LanguageSwitcher';
@@ -28,7 +29,7 @@ export function Login() {
         if (!isOtp(otp)) throw new Error(t('otpInvalid'));
         const result = await api.verifyOtp(phone, otp);
         saveSession(result.token, result);
-        navigate('/');
+        navigate(rolePath(result.role));
       }
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : t('requestFailed'));

@@ -108,5 +108,7 @@
     "BILL": "बिल",
     "PAYMENT": "भुगतान",
     "LATE_FEE": "देरी शुल्क"
-  }
+  },
+  "menu": "मेन्यू", "dashboard": "डैशबोर्ड", "role": {"HELPDESK": "सहायता डेस्क", "ACCOUNTS": "लेखा", "COMMITTEE": "समिति"}, "bill": "बिल", "billTotalValidation": "सर्वर चुने गए बिल का कुल बकाया जांचता है।",
+  "helpdeskTitle": "सहायता डेस्क", "complaintQueue": "शिकायत कतार", "allStatus": "सभी स्थितियां", "allCategory": "सभी श्रेणियां", "allUrgency": "सभी प्राथमिकताएं", "allTower": "सभी टावर", "escalatedOnly": "केवल बढ़ाई गई", "id": "आईडी", "age": "उम्र", "assignee": "जिम्मेदार", "linkedTo": "#{{id}} से जुड़ी", "escalatedReason": "बढ़ाई गई: {{reason}}", "saved": "सहेजा गया", "accountsTitle": "लेखा", "unclearPayments": "अस्पष्ट भुगतान अपने आप पोस्ट नहीं होते।", "uploadCsv": "CSV अपलोड करें", "matched": "मिलान", "queued": "कतार", "duplicate": "डुप्लिकेट", "error": "त्रुटि", "confidence": "विश्वास", "reference": "संदर्भ", "why": "कारण", "accountsQueue": "लेखा कतार", "resolve": "हल करें", "reject": "अस्वीकार", "openDue": "खुला बकाया", "noCandidates": "कोई संभावित फ्लैट नहीं", "billIdPrompt": "हल करने के लिए बिल आईडी डालें", "rejectReason": "अस्वीकार करने का कारण डालें", "committeeTitle": "समिति डैशबोर्ड", "dataAsOf": "{{date}} तक का डेटा", "collectionRate": "वसूली दर", "outstandingDues": "बकाया राशि", "slaBreaches": "SLA उल्लंघन", "duesAgeing": "बकाया आयु", "collections": "वसूली", "billed": "बिल राशि", "collected": "वसूल राशि", "onTimeRate": "समय पर दर", "paidByDay10": "10वें दिन तक भुगतान", "avgFirstResponse": "औसत पहली प्रतिक्रिया", "avgResolution": "औसत समाधान", "reopened": "फिर खोली गई", "topFlats": "सबसे अधिक बकाया वाले फ्लैट"
 }

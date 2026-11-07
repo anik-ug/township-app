@@ -61,3 +61,52 @@ export type Complaint = {
   createdAt: string;
   timeline: ComplaintEvent[];
 };
+export type HelpdeskComplaint = Complaint;
+export type BankRow = {
+  id: number;
+  date: string;
+  amountPaise: number;
+  rawAmount: string;
+  reference: string;
+  status: string;
+  confidence: number;
+  explanation: string;
+};
+export type UploadView = { id: number; counts: Record<string, number>; rows: BankRow[] };
+export type QueueView = {
+  id: number;
+  row: BankRow;
+  candidates: { flatId: number; flatNo: string; openDuePaise: number }[];
+};
+export type Dashboard = {
+  collections: {
+    billMonth: string;
+    billedPaise: number;
+    collectedPaise: number;
+    collectionRatePct: number;
+    flatsBilled: number;
+    flatsFullyPaid: number;
+    onTimeRatePct: number;
+    paymentsLast30DaysPaise: number;
+    paidByDay10Pct: number;
+  };
+  duesAgeing: {
+    buckets: Record<string, { flatCount: number; billCount: number; totalDuePaise: number }>;
+    totalOutstandingPaise: number;
+    topFlats: { flatNo: string; totalDuePaise: number }[];
+  };
+  complaints: {
+    openCount: number;
+    escalatedOpenCount: number;
+    byCategory: Record<string, number>;
+    avgFirstResponseMinutes: number;
+    avgResolutionHours: number;
+    reopenedPct: number;
+    slaBreaches: number;
+    responseExcludedCount: number;
+    resolutionExcludedCount: number;
+  };
+  accountsQueue: { queuedCount: number; queuedAmountPaise: number };
+  asOfDate: string;
+  generatedAt: string;
+};
