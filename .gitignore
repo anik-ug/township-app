@@ -4,3 +4,12 @@ backend/target/
 backend/.mvn/wrapper/maven-wrapper.jar
 
 .DS_Store
+
+node_modules/
+dist/
+.env.local
+*.log
+
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
