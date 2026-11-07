@@ -14,7 +14,9 @@ export const i18nReady = i18n
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
   })
-  .then(() => { document.documentElement.lang = i18n.language; });
+  .then(() => {
+    document.documentElement.lang = i18n.language;
+  });
 
 i18n.on('languageChanged', (language) => {
   localStorage.setItem('township_language', language);
