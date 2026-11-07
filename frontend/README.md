@@ -1,4 +1,4 @@
-# Township Resident App
+# Township App
 
 ## Run
 

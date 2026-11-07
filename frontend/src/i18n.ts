@@ -16,11 +16,13 @@ export const i18nReady = i18n
   })
   .then(() => {
     document.documentElement.lang = i18n.language;
+    document.title = i18n.t('appName');
   });
 
 i18n.on('languageChanged', (language) => {
   localStorage.setItem('township_language', language);
   document.documentElement.lang = language;
+  document.title = i18n.t('appName');
 });
 
 export default i18n;
