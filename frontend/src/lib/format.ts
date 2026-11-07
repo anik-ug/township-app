@@ -13,8 +13,8 @@ export function parseAmountPaise(value: string): number | null {
   const roundedCents = Number(fraction.slice(0, 2)) + (Number(fraction[2]) >= 5 ? 1 : 0);
   return Number(whole) * 100 + roundedCents;
 }
-export const formatDate = (value: string | null) => value ? new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeZone: 'Asia/Kolkata' }).format(new Date(`${value}T00:00:00+05:30`)) : '—';
-export const formatDateTime = (value: string) => new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' }).format(new Date(value));
+export const formatDate = (value: string | null, locale = 'en') => value ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'Asia/Kolkata' }).format(new Date(`${value}T00:00:00+05:30`)) : '';
+export const formatDateTime = (value: string, locale = 'en') => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' }).format(new Date(value));
 export const isPhone = (value: string) => /^[6-9]\d{9}$/.test(value);
 export const isOtp = (value: string) => /^\d{6}$/.test(value);
 export const validPayAmount = (value: number, total: number) => Number.isInteger(value) && value > 0 && value <= total;

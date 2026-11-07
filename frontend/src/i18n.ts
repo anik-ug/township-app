@@ -1,6 +1,24 @@
-import i18n from 'i18next'; import { initReactI18next } from 'react-i18next';
-const common = { bills: 'Bills', complaints: 'Complaints', account: 'Account', home: 'Home', logout: 'Log out', retry: 'Retry', loading: 'Loading', noData: 'Nothing here yet', newComplaint: 'New complaint', assigned: 'Assigned to our team', submit: 'Submit complaint', language: 'Language' };
-const en = { translation: { ...common, welcome: 'Welcome back', totalDue: 'Total due', payNow: 'Pay now', allPaid: 'All paid', dueOn: 'Due on', overdue: 'days overdue', openComplaints: 'Open complaints', loginTitle: 'Resident login', phone: 'Mobile number', sendOtp: 'Send OTP', verify: 'Verify OTP', otp: 'One-time password', back: 'Back', demoOtp: 'Demo OTP: 123456', phoneInvalid: 'Enter a valid 10 digit mobile number', otpInvalid: 'Enter a 6 digit OTP', billDetails: 'Bill details', principal: 'Principal', paid: 'Paid', lateFee: 'Late fee', total: 'Total due', ledger: 'Flat ledger', payBill: 'Pay bill', amount: 'Amount', fullAmount: 'Full amount', otherAmount: 'Other amount', testMode: 'Test mode, no real money', confirmPayment: 'Confirm payment', receipt: 'Payment receipt', remaining: 'Remaining due', description: 'Description', category: 'Category', optional: 'optional', characters: 'characters', escalated: 'Marked urgent, the duty manager has been informed', status: 'Status', timeline: 'Timeline', reopen: 'Reopen', rate: 'Rate this complaint', ...common } };
-const hi = { translation: { ...en.translation } }; const mr = { translation: { ...en.translation } };
-void i18n.use(initReactI18next).init({ resources: { en, hi, mr }, lng: localStorage.getItem('township_language') || 'en', fallbackLng: 'en', interpolation: { escapeValue: false } });
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import en from './locales/en.json';
+import hi from './locales/hi.json';
+import mr from './locales/mr.json';
+
+const savedLanguage = localStorage.getItem('township_language') || 'en';
+
+export const i18nReady = i18n
+  .use(initReactI18next)
+  .init({
+    resources: { en: { translation: en }, hi: { translation: hi }, mr: { translation: mr } },
+    lng: savedLanguage,
+    fallbackLng: 'en',
+    interpolation: { escapeValue: false },
+  })
+  .then(() => { document.documentElement.lang = i18n.language; });
+
+i18n.on('languageChanged', (language) => {
+  localStorage.setItem('township_language', language);
+  document.documentElement.lang = language;
+});
+
 export default i18n;
