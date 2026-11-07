@@ -1,6 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 
+export const languageOptions = [
+  { code: 'en', label: 'English' },
+  { code: 'hi', label: 'हिन्दी' },
+  { code: 'mr', label: 'मराठी' },
+] as const;
+
 export function LanguageSwitcher() {
   const { t } = useTranslation();
   return (
@@ -10,9 +16,11 @@ export function LanguageSwitcher() {
       value={i18n.language}
       onChange={(event) => void i18n.changeLanguage(event.target.value)}
     >
-      <option value="en">{t('englishLanguage')}</option>
-      <option value="hi">{t('hindiLanguage')}</option>
-      <option value="mr">{t('marathiLanguage')}</option>
+      {languageOptions.map(({ code, label }) => (
+        <option key={code} value={code} lang={code === 'en' ? undefined : code}>
+          {label}
+        </option>
+      ))}
     </select>
   );
 }

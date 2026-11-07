@@ -74,9 +74,6 @@
   "backLabel": "वापस",
   "urgent": "जरूरी",
   "selectLanguage": "भाषा चुनें",
-  "englishLanguage": "अंग्रेज़ी",
-  "hindiLanguage": "हिन्दी",
-  "marathiLanguage": "मराठी",
   "flatLabel": "फ्लैट {{flat}}",
   "statusLabels": {
     "PAID": "भुगतान हुआ",

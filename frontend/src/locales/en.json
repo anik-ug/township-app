@@ -74,9 +74,6 @@
   "backLabel": "Back",
   "urgent": "Urgent",
   "selectLanguage": "Select language",
-  "englishLanguage": "English",
-  "hindiLanguage": "Hindi",
-  "marathiLanguage": "Marathi",
   "flatLabel": "Flat {{flat}}",
   "statusLabels": {
     "PAID": "Paid",

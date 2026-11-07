@@ -74,9 +74,6 @@
   "backLabel": "मागे",
   "urgent": "तातडीचे",
   "selectLanguage": "भाषा निवडा",
-  "englishLanguage": "इंग्रजी",
-  "hindiLanguage": "हिंदी",
-  "marathiLanguage": "मराठी",
   "flatLabel": "फ्लॅट {{flat}}",
   "statusLabels": {
     "PAID": "भरलेले",
