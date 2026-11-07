@@ -7,11 +7,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.time.LocalDate;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findByFlatIdOrderByBillMonthDesc(Long flatId);
     List<Bill> findByFlatIdOrderByBillMonthAsc(Long flatId);
+
+    @EntityGraph(attributePaths = {"flat"})
+    List<Bill> findAllByBillMonthLessThanEqual(LocalDate billMonth);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select b from Bill b join fetch b.flat where b.id = :id")
