@@ -12,7 +12,24 @@ import type {
   User,
 } from '../types';
 
-const base = import.meta.env.VITE_API_URL || 'http://localhost:8090';
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8090';
+const REQUEST_TIMEOUT_MS = 25_000;
+const RETRY_DELAY_MS = 10_000;
+const MAX_RETRIES = 8;
+const MAX_ATTEMPTS = MAX_RETRIES + 1;
+type WakeState = { waking: boolean; attempt: number; maxAttempts: number };
+const wakeListeners = new Set<() => void>();
+let wakeState: WakeState = { waking: false, attempt: 0, maxAttempts: MAX_ATTEMPTS };
+export const getWakeState = () => wakeState;
+export const subscribeWakeState = (listener: () => void) => {
+  wakeListeners.add(listener);
+  return () => wakeListeners.delete(listener);
+};
+const setWakeState = (next: WakeState) => {
+  wakeState = next;
+  wakeListeners.forEach((listener) => listener());
+};
+
 export const TOKEN_KEY = 'township_token';
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const clearSession = () => {
@@ -28,26 +45,56 @@ export class ApiError extends Error {
     super(message);
   }
 }
+
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
   if (!(init.body instanceof FormData)) headers.set('Content-Type', 'application/json');
   const token = getToken();
   if (token) headers.set('Authorization', `Bearer ${token}`);
-  const response = await fetch(`${base}${path}`, { ...init, headers });
-  if (response.status === 401) {
-    clearSession();
-    window.location.assign('/login');
-    throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
+  const method = (init.method || 'GET').toUpperCase();
+  const retryable =
+    method === 'GET' ||
+    (method === 'POST' && (path === '/api/auth/request-otp' || path === '/api/auth/verify-otp'));
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      const response = await fetch(`${API_BASE}${path}`, {
+        ...init,
+        headers,
+        signal: controller.signal,
+      });
+      if (response.status === 401) {
+        clearSession();
+        window.location.assign('/login');
+        throw new ApiError(401, 'UNAUTHORIZED', 'Authentication required');
+      }
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok)
+        throw new ApiError(
+          response.status,
+          data.error || 'REQUEST_ERROR',
+          data.message || 'Request failed',
+        );
+      setWakeState({ waking: false, attempt: 0, maxAttempts: MAX_ATTEMPTS });
+      return data as T;
+    } catch (error) {
+      const transient =
+        error instanceof DOMException ? error.name === 'AbortError' : error instanceof TypeError;
+      if (!retryable || !transient || attempt === MAX_ATTEMPTS) {
+        setWakeState({ waking: false, attempt: 0, maxAttempts: MAX_ATTEMPTS });
+        throw error;
+      }
+      setWakeState({ waking: true, attempt: attempt + 1, maxAttempts: MAX_ATTEMPTS });
+      await new Promise<void>((resolve) => window.setTimeout(resolve, RETRY_DELAY_MS));
+    } finally {
+      window.clearTimeout(timeout);
+    }
   }
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok)
-    throw new ApiError(
-      response.status,
-      data.error || 'REQUEST_ERROR',
-      data.message || 'Request failed',
-    );
-  return data as T;
+  throw new Error('Request failed');
 }
+
 export const api = {
   requestOtp: (phone: string) =>
     request<{ message: string }>('/api/auth/request-otp', {

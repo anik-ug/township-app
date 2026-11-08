@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../lib/api';
+import { API_BASE, api } from '../../lib/api';
 import { isOtp, isPhone } from '../../lib/format';
 import { saveSession } from '../../lib/session';
 import { rolePath } from '../../lib/guard';
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
 import { LanguageSwitcher } from '../../components/LanguageSwitcher';
+import { WakingBanner } from '../../components/WakingBanner';
 
 export function Login() {
   const { t } = useTranslation();
@@ -16,6 +17,10 @@ export function Login() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    void fetch(API_BASE, { mode: 'no-cors' }).catch(() => undefined);
+  }, []);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -42,6 +47,7 @@ export function Login() {
         <LanguageSwitcher />
       </div>
       <div className="w-full rounded-lg border border-slate-200 bg-white p-6">
+        <WakingBanner />
         <div className="mb-10">
           <p className="mb-2 font-semibold text-accent">{t('appName')}</p>
           <h1 className="text-3xl font-bold">{t('loginTitle')}</h1>

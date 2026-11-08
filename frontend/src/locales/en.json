@@ -25,6 +25,8 @@
   "phoneInvalid": "Enter a valid 10 digit mobile number",
   "otpInvalid": "Enter a 6 digit OTP",
   "requestFailed": "Request failed",
+  "serverWaking": "The server is waking up (free hosting). This can take up to 2 minutes. Please wait.",
+  "serverWakingAttempt": "Attempt {{current}} of {{total}}",
   "fileTooLarge": "Choose a CSV file no larger than 1 MB.",
   "rejectReasonRequired": "Enter a rejection reason between 1 and 500 characters.",
   "unableHome": "Unable to load home",

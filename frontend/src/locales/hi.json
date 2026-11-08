@@ -25,6 +25,8 @@
   "phoneInvalid": "10 अंकों का सही मोबाइल नंबर डालें",
   "otpInvalid": "6 अंकों का OTP डालें",
   "requestFailed": "अनुरोध विफल हुआ",
+  "serverWaking": "सर्वर जाग रहा है (मुफ़्त होस्टिंग)। इसमें 2 मिनट तक लग सकते हैं। कृपया प्रतीक्षा करें।",
+  "serverWakingAttempt": "प्रयास {{current}} / {{total}}",
   "fileTooLarge": "1 MB से छोटी CSV फ़ाइल चुनें।",
   "rejectReasonRequired": "1 से 500 अक्षरों का अस्वीकार कारण डालें।",
   "unableHome": "होम लोड नहीं हो सका",
