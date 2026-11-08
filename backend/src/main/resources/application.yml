@@ -19,8 +19,8 @@ server:
 
 logging:
   level:
-    org.springframework.web: DEBUG
-    org.springframework.security: DEBUG
+    org.springframework.web: ${LOG_LEVEL_WEB:INFO}
+    org.springframework.security: ${LOG_LEVEL_SECURITY:INFO}
 
 app:
   jwt-secret: ${JWT_SECRET:local-dev-jwt-secret-change-me-32-chars}
