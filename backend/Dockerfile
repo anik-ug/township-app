@@ -8,6 +8,6 @@ RUN mvn -q -B -DskipTests package
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-ENV JAVA_OPTS="-Xmx320m -XX:+UseSerialGC"
+ENV JAVA_OPTS="-Xmx320m -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xss512k"
 EXPOSE 8080
 CMD ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"]
