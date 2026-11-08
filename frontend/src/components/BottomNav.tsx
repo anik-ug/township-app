@@ -10,8 +10,8 @@ export function BottomNav() {
     ['/account', 'account'],
   ];
   return (
-    <nav className="fixed inset-x-0 bottom-0 border-t border-slate-200 bg-white md:static md:mt-8 md:border-0">
-      <div className="mx-auto flex max-w-md justify-around pb-[env(safe-area-inset-bottom)] pt-2 text-xs md:rounded-lg md:border md:border-slate-200">
+    <nav className="fixed inset-x-0 bottom-0 border-t border-slate-200 bg-white">
+      <div className="mx-auto flex max-w-md justify-around pb-[env(safe-area-inset-bottom)] pt-2 text-xs md:max-w-2xl md:rounded-lg md:border md:border-slate-200">
         {links.map(([to, key]) => (
           <NavLink
             className={({ isActive }) =>
