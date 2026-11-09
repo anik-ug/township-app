@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: township
+      POSTGRES_USER: township
+      POSTGRES_PASSWORD: township_dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U township"]
+      interval: 3s
+      retries: 20
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/township
+      DB_USER: township
+      DB_PASSWORD: township_dev
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET, see deployment.md}
+      DEMO_OTP: "123456"
+      AS_OF_DATE: "2026-11-05"
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "8090:8080"
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8090
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
