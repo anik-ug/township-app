@@ -27,12 +27,15 @@ export function ComplaintDetail() {
       <Card>
         <div className="flex justify-between gap-3">
           <h2 className="font-semibold">{data.description}</h2>
-          <StatusBadge status={data.status} escalated={data.escalated} />
+          <StatusBadge status={data.status} />
         </div>
         <p className="mt-3 text-muted">
-          {t(`categories.${data.category}`, { defaultValue: data.category })} ·{' '}
-          {t(`urgencyLabels.${data.urgency}`, { defaultValue: data.urgency })}
+          {t(`categories.${data.category}`, { defaultValue: t('unknownStatus') })} ·{' '}
+          {t(`urgencyLabels.${data.urgency}`, { defaultValue: t('unknownStatus') })}
         </p>
+        {data.escalated && (
+          <p className="mt-4 rounded bg-amber-50 p-3 text-warning">{t('escalated')}</p>
+        )}
         {data.status === 'RESOLVED' && (
           <Button
             variant="secondary"

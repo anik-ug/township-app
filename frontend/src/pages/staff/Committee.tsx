@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../lib/api';
-import { formatDate, formatMoney } from '../../lib/format';
+import { formatDate, formatDuration, formatMoney } from '../../lib/format';
 import type { Dashboard } from '../../types';
 import { StaffLayout } from '../../layouts/StaffLayout';
 import { StaffState, Stat } from './StaffStates';
@@ -82,9 +82,13 @@ export function Committee() {
                 <h2 className="mb-4 text-xl font-bold">{t('complaints')}</h2>
                 <dl className="grid grid-cols-2 gap-3 text-sm">
                   <dt>{t('avgFirstResponse')}</dt>
-                  <dd className="text-right nums">{data.complaints.avgFirstResponseMinutes} min</dd>
+                  <dd className="text-right nums">
+                    {formatDuration(data.complaints.avgFirstResponseMinutes)}
+                  </dd>
                   <dt>{t('avgResolution')}</dt>
-                  <dd className="text-right nums">{data.complaints.avgResolutionHours} h</dd>
+                  <dd className="text-right nums">
+                    {formatDuration(data.complaints.avgResolutionHours * 60)}
+                  </dd>
                   <dt>{t('reopened')}</dt>
                   <dd className="text-right nums">{data.complaints.reopenedPct}%</dd>
                 </dl>

@@ -41,7 +41,7 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
     };
   }, [open]);
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="flex min-h-dvh bg-surface">
       <header className="flex items-center justify-between border-b bg-white px-4 py-3 md:hidden">
         <button
           ref={menuButtonRef}
@@ -73,13 +73,15 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
         tabIndex={-1}
         role="dialog"
         aria-label={t('staffMenu')}
-        className={`fixed inset-y-0 z-20 flex w-64 flex-col overflow-y-auto border-r bg-white p-5 ${open ? 'block' : 'hidden'} md:flex`}
+        className={`fixed inset-y-0 z-20 flex w-60 flex-col overflow-y-auto border-r bg-white p-5 ${open ? 'block' : 'hidden'} md:static md:sticky md:top-0 md:flex md:h-screen md:shrink-0`}
       >
-        <div className="mb-8 flex items-start justify-between text-xl font-bold text-accent">
-          {t('appName')}{' '}
-          <span className="text-sm font-semibold text-ink">
-            · {t(`role.${user?.role}`, { defaultValue: user?.role })}
-          </span>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <p className="text-xl font-bold text-accent">{t('appName')}</p>
+            <span className="mt-2 inline-flex rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-muted">
+              {t(`role.${user?.role}`, { defaultValue: user?.role })}
+            </span>
+          </div>
           <button
             className="tap focus-ring -mr-2 -mt-2 text-2xl md:hidden"
             aria-label={t('closeMenu')}
@@ -98,7 +100,13 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
                   ? '/accounts'
                   : '/committee'
             }
-            className="block rounded-lg px-3 py-3 font-semibold hover:bg-slate-100"
+            className={({ isActive }) =>
+              `flex min-h-11 items-center rounded-r-lg border-l-2 px-3 font-semibold transition-colors duration-150 ${
+                isActive
+                  ? 'border-accent bg-accent/10 text-accent'
+                  : 'border-transparent hover:bg-slate-100'
+              }`
+            }
           >
             {t(
               user?.role === 'HELPDESK'
@@ -135,8 +143,8 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
           </button>
         </div>
       </aside>
-      <main className="md:ml-64">
-        <div className="mx-auto max-w-7xl p-4 md:p-8">{children || <Outlet />}</div>
+      <main className="min-w-0 flex-1">
+        <div className="mx-auto max-w-7xl p-4 md:p-6 lg:p-8">{children || <Outlet />}</div>
       </main>
     </div>
   );

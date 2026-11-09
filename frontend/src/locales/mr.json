@@ -149,6 +149,7 @@
   "escalatedOnly": "फक्त वाढवलेल्या",
   "id": "आयडी",
   "age": "वय",
+  "today": "आज",
   "assignee": "जबाबदार",
   "linkedTo": "#{{id}} शी जोडलेले",
   "escalatedReason": "वाढवलेले: {{reason}}",

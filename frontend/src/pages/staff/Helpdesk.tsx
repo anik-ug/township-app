@@ -135,7 +135,9 @@ export function Helpdesk() {
                     className={`cursor-pointer border-t hover:bg-slate-50 ${row.escalated ? 'border-l-4 border-l-amber-500' : ''}`}
                   >
                     <td className="px-4 py-3 nums">#{row.id}</td>
-                    <td className="max-w-xs truncate px-4 py-3">{row.description}</td>
+                    <td className="max-w-xs truncate px-4 py-3" title={row.description}>
+                      {row.description}
+                    </td>
                     <td className="px-4 py-3">
                       <span>{t(`categories.${row.category}`)}</span>
                       <span className="mt-1 block w-fit rounded bg-slate-100 px-2 py-0.5 text-xs text-muted">
@@ -155,8 +157,12 @@ export function Helpdesk() {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3">{row.assigneeId ?? '—'}</td>
-                    <td className="px-4 py-3 nums">{age(row.createdAt)}d</td>
+                    <td className="px-4 py-3">
+                      {row.assigneeId === null ? '—' : `Staff #${row.assigneeId}`}
+                    </td>
+                    <td className="px-4 py-3 nums">
+                      {age(row.createdAt) === 0 ? t('today') : `${age(row.createdAt)}d`}
+                    </td>
                   </tr>
                 ))}
               </tbody>

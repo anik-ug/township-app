@@ -104,15 +104,15 @@ export function Pay() {
         </div>
         <FormField label={t('amount')}>
           <div
-            className={`flex h-12 items-center rounded-lg border ${message ? 'border-danger' : 'border-slate-300'} bg-white`}
+            className={`flex h-12 items-center rounded-lg border ${message || validationMessage ? 'border-danger' : 'border-slate-300'} bg-white`}
           >
             <span className="px-4 text-muted">₹</span>
             <input
               inputMode="decimal"
               autoComplete="off"
               aria-label={t('amount')}
-              aria-invalid={Boolean(message)}
-              aria-describedby="amount-help amount-error"
+              aria-invalid={Boolean(message || validationMessage)}
+              aria-describedby={message || validationMessage ? 'amount-error' : 'amount-help'}
               readOnly={selected === 'full'}
               placeholder="0.00"
               className="focus-ring h-full min-w-0 flex-1 rounded-r-lg px-2 nums outline-none"
@@ -124,12 +124,14 @@ export function Pay() {
               }}
             />
           </div>
-          <span id="amount-help" className="text-sm text-muted">
-            {t('amountHint')}
-          </span>
-          {message && (
+          {(message || validationMessage) && (
             <span id="amount-error" role="alert" className="block text-sm text-danger">
-              {message}
+              {message || validationMessage}
+            </span>
+          )}
+          {!message && !validationMessage && (
+            <span id="amount-help" className="text-sm text-muted">
+              {t('amountHint')}
             </span>
           )}
         </FormField>

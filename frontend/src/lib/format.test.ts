@@ -6,6 +6,7 @@ import {
   parseAmountPaise,
   parseRupeesToPaise,
   sanitizeRupeeInput,
+  formatDuration,
   validPayAmount,
 } from './format';
 import { isResidentAccess } from './guard';
@@ -17,6 +18,14 @@ describe('formatMoney', () => {
   it('handles zero and negative values', () => {
     expect(formatMoney(0)).toBe('₹0.00');
     expect(formatMoney(-1250)).toBe('-₹12.50');
+  });
+  describe('formatDuration', () => {
+    it('formats minutes as compact days, hours, and minutes', () => {
+      expect(formatDuration(45)).toBe('45 min');
+      expect(formatDuration(90)).toBe('1 h 30 min');
+      expect(formatDuration(1402.5)).toBe('23 h 22 min');
+      expect(formatDuration(1740)).toBe('1 d 5 h');
+    });
   });
 });
 describe('validation', () => {

@@ -149,6 +149,7 @@
   "escalatedOnly": "Escalated only",
   "id": "ID",
   "age": "Age",
+  "today": "Today",
   "assignee": "Assignee",
   "linkedTo": "Linked to #{{id}}",
   "escalatedReason": "Escalated: {{reason}}",

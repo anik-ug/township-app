@@ -32,6 +32,21 @@ export function parseRupeesToPaise(value: string): number | null {
   if (paise === 0n || paise > BigInt(Number.MAX_SAFE_INTEGER)) return null;
   return Number(paise);
 }
+export function formatDuration(minutes: number): string {
+  const totalMinutes = Math.max(0, Math.floor(minutes));
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const remainingMinutes = totalMinutes % 60;
+  return (
+    [
+      days ? `${days} d` : '',
+      hours ? `${hours} h` : '',
+      remainingMinutes ? `${remainingMinutes} min` : '',
+    ]
+      .filter(Boolean)
+      .join(' ') || '0 min'
+  );
+}
 export const formatDate = (value: string | null, locale = 'en') =>
   value
     ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'Asia/Kolkata' }).format(
