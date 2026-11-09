@@ -68,12 +68,12 @@ export function Helpdesk() {
           <h1 className="text-3xl font-bold">{t('helpdeskTitle')}</h1>
           <p className="text-muted">{t('complaintQueue')}</p>
         </div>
-        <div className="flex flex-wrap gap-2 rounded-lg border bg-white p-3">
+        <div className="flex flex-col gap-2 rounded-lg border bg-white p-3 md:flex-row md:flex-wrap">
           {(['status', 'category', 'urgency', 'tower'] as const).map((key) => (
             <select
               key={key}
               aria-label={t(key)}
-              className="focus-ring rounded border px-3 py-2"
+              className="focus-ring w-full rounded border px-3 py-2 md:w-auto"
               value={filters[key]}
               onChange={(e) => setFilters({ ...filters, [key]: e.target.value })}
             >

@@ -41,7 +41,7 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
     };
   }, [open]);
   return (
-    <div className="flex min-h-dvh bg-surface">
+    <div className="flex min-h-dvh flex-col bg-surface md:flex-row">
       <header className="flex items-center justify-between border-b bg-white px-4 py-3 md:hidden">
         <button
           ref={menuButtonRef}
@@ -63,7 +63,7 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
       {open && (
         <button
           aria-label={t('closeMenu')}
-          className="fixed inset-0 z-10 bg-black/30 md:hidden"
+          className="fixed inset-0 z-30 bg-black/30 md:hidden"
           onClick={closeMenu}
         />
       )}
@@ -73,7 +73,7 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
         tabIndex={-1}
         role="dialog"
         aria-label={t('staffMenu')}
-        className={`fixed inset-y-0 z-20 flex w-60 flex-col overflow-y-auto border-r bg-white p-5 ${open ? 'block' : 'hidden'} md:static md:sticky md:top-0 md:flex md:h-screen md:shrink-0`}
+        className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-60 max-w-[85vw] flex-col overflow-y-auto border-r bg-white p-5 transition-transform duration-150 ${open ? 'translate-x-0' : 'hidden -translate-x-full'} md:static md:sticky md:top-0 md:flex md:h-screen md:w-60 md:max-w-none md:shrink-0 md:translate-x-0`}
       >
         <div className="mb-8 flex items-start justify-between">
           <div>
@@ -144,7 +144,7 @@ export function StaffLayout({ children }: { children?: React.ReactNode }) {
         </div>
       </aside>
       <main className="min-w-0 flex-1">
-        <div className="mx-auto max-w-7xl p-4 md:p-6 lg:p-8">{children || <Outlet />}</div>
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8">{children || <Outlet />}</div>
       </main>
     </div>
   );

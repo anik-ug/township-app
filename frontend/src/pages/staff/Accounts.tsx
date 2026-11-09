@@ -130,7 +130,7 @@ export function Accounts() {
                         {row.status === 'ERROR' ? row.rawAmount : formatMoney(row.amountPaise)}
                       </td>
                       <td className="px-4 py-3">{row.reference}</td>
-                      <td className="max-w-sm px-4 py-3">{row.explanation}</td>
+                      <td className="max-w-sm break-words px-4 py-3">{row.explanation}</td>
                     </tr>
                   ))}
                 </tbody>
